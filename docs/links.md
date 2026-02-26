@@ -1,0 +1,23 @@
+1. Математика:
+    - Теория:
+        - Ссылки:
+            - [AOPS](https://artofproblemsolving.com/wiki/index.php) [(Если нужны категории)](https://artofproblemsolving.com/wiki/index.php/Special:Categories)
+            - [jpsaha](https://jpsaha.github.io/MOTPold/)
+    - Задачи:
+        - Ссылки:
+            - [Мехмат МГУ](https://mmmf.msu.ru/archive/)
+            - [mathus](https://mathus.ru/math/)
+Книги:
+[Архив](https://t.me/c/3727024678/3)
+
+2. Олимпиадное программирование:
+    - Теория:
+        - Ссылки:
+            - [Алгоритмика](https://algorithmica.org/)
+            - [Английская алгоритмика](https://en.algorithmica.org/)
+            - [e-maxx](http://e-maxx.ru/algo/)
+    - Практика:
+        - [CodeForces](https://codeforces.com/)
+        - [LeetCode](https://leetcode.com/problemset/) если задачи codeforces слишком сложные
+3. Прочее:
+    - [GitHub форматирование](https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
