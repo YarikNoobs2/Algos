@@ -5,25 +5,16 @@ using namespace std;
 
 
 vector<int> up;
-stack<pair<int, int>> st;
 
 int p(int a) {
-    return up[a] < 0 ? a : p(up[a]);
+    return up[a] < 0 ? a : up[a] = p(up[a]);
 }
 void unite(int a, int b) {
     a = p(a);
     b = p(b);
     if (up[a] > up[b]) swap(a, b);
-    st.push({up[b], b});
     up[a] += up[b];
     up[b] = a;
-}
-int back() {
-    auto a = st.top();
-    st.pop();
-    up[p(a.second)] -= a.first;
-    up[a.second] = a.first;
-    return a.second;
 }
 
 int main() {
@@ -35,9 +26,6 @@ int main() {
     for (int i = 0; i < m; i++) {
         char a;
         cin >> a;
-        if (a == '-') {
-            cout << -up[back()] << endl;
-        }
         if (a == '+') {
             int b, c;
             cin >> b >> c;
