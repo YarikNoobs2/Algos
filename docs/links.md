@@ -7,9 +7,6 @@
         - Ссылки:
             - [Мехмат МГУ](https://mmmf.msu.ru/archive/)
             - [mathus](https://mathus.ru/math/)
-Книги:
-[Архив](https://t.me/c/3727024678/3)
-
 2. Олимпиадное программирование:
     - Теория:
         - Ссылки:
@@ -21,3 +18,5 @@
         - [LeetCode](https://leetcode.com/problemset/) если задачи codeforces слишком сложные
 3. Прочее:
     - [GitHub форматирование](https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+4. Книги:
+    - [Архив](https://t.me/c/3727024678/3)

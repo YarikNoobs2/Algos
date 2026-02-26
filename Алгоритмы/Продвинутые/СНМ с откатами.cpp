@@ -13,6 +13,10 @@ int p(int a) {
 void unite(int a, int b) {
     a = p(a);
     b = p(b);
+    if (a == b) {
+        st.push({1, a});
+        return;
+    }
     if (up[a] > up[b]) swap(a, b);
     st.push({up[b], b});
     up[a] += up[b];
@@ -21,10 +25,12 @@ void unite(int a, int b) {
 int back() {
     auto a = st.top();
     st.pop();
-    up[p(a.second)] -= a.first;
+    if (a.first > 0) return a.second;
+    up[up[a.second]] -= a.first;
     up[a.second] = a.first;
     return a.second;
 }
+
 
 int main() {
     cin.tie(0);
