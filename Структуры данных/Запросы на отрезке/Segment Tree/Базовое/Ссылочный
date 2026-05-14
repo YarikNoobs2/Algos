@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> v;
+//Впервые пишу ссылочное ДО
+struct SegmentTree {
+    SegmentTree* l = 0;
+    SegmentTree* r = 0;
+    int lb, rb;
+    int sm;
+    SegmentTree(int lb, int rb): lb(lb), rb(rb), sm(v[lb-1]) {
+        if (lb + 1 > rb) return;
+        int m = (lb + rb) / 2;
+        l = new SegmentTree(lb, m);
+        r = new SegmentTree(m + 1, rb);
+        sm = l->sm + r->sm;
+    }
+    void add(int k, int x) {
+        sm += x;
+        if (l) {
+            if (k > l->rb) {
+                r->add(k, x);
+            }
+            else {
+                l->add(k, x);
+            }
+        }
+    }
+    int get(int lq, int rq) {
+        if (lb > rq || rb < lq) return 0;
+        if (lb >= lq && rb <= rq) return sm;
+        return l->get(lq, rq) + r->get(lq, rq);
+    }
+};
+
+int main() {
+    //ios::sync_with_stdio(false);
+    //cin.tie(0);
+    int n;
+    cin >> n;
+    v.resize(n);
+    for (int i = 0; i < n; i++) {
+        cin >> v[i];
+    }
+    SegmentTree t(1, n);
+    int q;
+    cin >> q;
+    while (q--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        if (a == 0) {
+            cout << t.get(b, c) << '\n';
+        }
+        else {
+            t.add(b, c);
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,113 @@
+#include <bits/stdc++.h>
+using namespace std;
+//Топовый Ахо-Корасик
+struct Node {
+    map<char, Node*> to;
+    map<char, Node*> go;
+    Node* link = 0;
+    Node* p;
+    Node* up = 0;
+    int d;
+    int temp = 0;
+    int pch;
+    Node(char ch, Node* _p, int d): p(_p), pch(ch), d(d) {}
+};
+Node* root = new Node(-1, 0, 0);
+void add(string &s, int type) {
+    Node* v = root;
+    for (char i : s) {
+        //i = i - 'a';
+        if (!v->to[i]) {
+            v->to[i] = new Node(i, v, v->d + 1);
+        }
+        v = v->to[i];
+    }
+    v->temp = type;
+}
+Node* go(Node* v, int t);
+
+Node* link(Node* v) {
+    if (!v->link) {
+        if (v == root || v->p == root) {
+            v->link = root;
+        }
+        else {
+            v->link = go(link(v->p), v->pch);
+        }
+    }
+    return v->link;
+}
+Node* go(Node* v, int t) {
+    if (!v->go[t]) {
+        if (v->to[t]) {
+            v->go[t] = v->to[t];
+        }
+        else if (v == root) {
+            v->go[t] = root;
+        }
+        else {
+            v->go[t] = go(link(v), t);
+        }
+    }
+    return v->go[t];
+}
+Node* up(Node* v) {
+    if (!v->up) {
+        Node* u = link(v);
+        if (u->temp) {
+            v->up = u;
+        }
+        else if (u == root) {
+            v->up = 0;
+        }
+        else {
+            v->up = up(u);
+        }
+    }
+    return v->up;
+}
+int get_max(Node* v) {
+    int mx = 0;
+    while (v) {
+        if (v->temp) mx = max(mx, v->d);
+        v = up(v);
+    }
+    return mx;
+}
+vector<int> get_up(Node* v) {
+    vector<int> res;
+    while (v) {
+        if (v->temp) res.push_back(v->temp);
+        v = up(v);
+    }
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        string s;
+        cin >> s;
+        add(s, i+1);
+    }
+    int m;
+    cin >> m;
+    cin.ignore();
+    for (int i = 0; i < m; i++) {
+        string s;
+        getline(cin, s);
+        Node* v = root;
+        for (int j = 0; j < s.size(); j++) {
+            v = go(v, s[j]);
+            int d = get_max(v);
+            for (int k = j - d + 1; k <= j; k++) {
+                s[k] = '*';
+            }
+        }
+        cout << s << '\n';
+    }
+    return 0;
+}
