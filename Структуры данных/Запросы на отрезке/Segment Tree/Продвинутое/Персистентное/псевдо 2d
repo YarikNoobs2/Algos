@@ -1,0 +1,102 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+//Впервые пишу ссылочное ДО
+struct SegmentTree {
+    SegmentTree* l = 0;
+    SegmentTree* r = 0;
+    int lb, rb;
+    int sm = 0;
+    SegmentTree(int lb, int rb): lb(lb), rb(rb) {
+        if (lb + 1 > rb) return;
+        int m = (lb + rb) / 2;
+        l = new SegmentTree(lb, m);
+        r = new SegmentTree(m + 1, rb);
+        sm = l->sm + r->sm;
+    }
+    void copy() {
+        if (!l) return;
+        l = new SegmentTree(*l);
+        r = new SegmentTree(*r);
+    }
+    void add(int k, int x) {
+        copy();
+        sm += x;
+        if (l) {
+            if (k > l->rb) {
+                r->add(k, x);
+            }
+            else {
+                l->add(k, x);
+            }
+        }
+    }
+    int get(int lq, int rq) {
+        if (lb > rq || rb < lq) return 0;
+        if (lb >= lq && rb <= rq) return sm;
+        return l->get(lq, rq) + r->get(lq, rq);
+    }
+};
+vector<SegmentTree*> roots;
+void add(int k, int x, int v) {
+    if (v >= roots.size()) {
+        roots.push_back(new SegmentTree(*roots[v-1]));
+    }
+    roots[v]->add(k, x);
+
+}
+int get(int x, int l, int r) {
+    if (x < 0) return 0;
+    return roots[x]->get(l, r);
+}
+int get(int x1, int y1, int x2, int y2) {
+    return get(x2, y1, y2) - get(x1-1, y1, y2);
+}
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int n;
+    cin >> n;
+    vector<pair<int, int>> v(n);
+    vector<pair<int, int>> v1(n);
+    for (int i = 0; i < n; i++) {
+        int a, b;
+        cin >> a >> b;
+        v[i] = {a, b};
+        v1[i] = {b, a};
+    }
+    sort(v.begin(), v.end());
+    sort(v1.begin(), v1.end());
+    map<int, int> mx;
+    map<int, int> my;
+    int cnt = -1;
+    for (int i = 0; i < n; i++) {
+        if (i == 0 || v1[i].first != v1[i-1].first) {
+            cnt++;
+            my[v1[i].first] = cnt;
+        }
+    }
+    my.insert({INT_MAX, cnt + 1});
+    roots.push_back(new SegmentTree(0, cnt));
+    cnt = -1;
+    for (int i = 0; i < n; i++) {
+        if (i == 0 || v[i].first != v[i-1].first) {
+            cnt++;
+            mx[v[i].first] = cnt;
+        }
+        add(my[v[i].second], 1, mx[v[i].first]);
+    }
+    mx.insert({INT_MAX, cnt + 1});
+    int q;
+    cin >> q;
+    while (q--) {
+        int x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        x1 = mx.lower_bound(x1)->second;
+        y1 = my.lower_bound(y1)->second;
+        x2 = mx.upper_bound(x2)->second-1;
+        y2 = my.upper_bound(y2)->second-1;
+        cout << get(x1, y1, x2, y2) << '\n';
+    }
+    return 0;
+}
